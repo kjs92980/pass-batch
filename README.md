@@ -9,7 +9,7 @@ sequenceDiagram
     participant DB
     Batch->>DB: 사용자별 이용권 조회
     activate DB
-    DB->>Batch:
+    DB->>Batch: 사용자별 이용권 응답
     deactivate DB
     Batch->>DB: 이용권 만료 상태 변경
 ```
@@ -24,7 +24,7 @@ sequenceDiagram
 
     Batch->>DB: 일괄 지급 이용권 조회
     activate DB
-    DB->>Batch:
+    DB->>Batch: 일괄 지급 이용권 응답
     deactivate DB
     Batch->>DB: 해당 사용자 이용권 추가
 ```
@@ -37,17 +37,17 @@ sequenceDiagram
     participant Messenger
     Batch->>DB: 예약된 수업, 사용자 조회
     activate DB
-    DB->>Batch:
+    DB->>Batch: 예약된 수업, 사용자 응답
     deactivate DB
     Batch->>DB: 알림 대상 추가
     
     Batch->>DB: 알림 대상 조회
     activate DB
-    DB->>Batch:
+    DB->>Batch: 알림 대상 응답
     deactivate DB
     Batch->>Messenger: 알림 요청
     activate Messenger
-    Messenger->>Batch
+    Messenger->>Batch: 알림 응답
     deactivate Messenger
 ```
 
@@ -58,7 +58,7 @@ sequenceDiagram
     participant DB
     Batch->>DB: 예약된 수업, 사용자 조회
     activate DB
-    DB->>Batch:
+    DB->>Batch: 예약된 수업, 사용자 응답
     deactivate DB
     Batch->>DB: 사용자 별 이용권 차감
 ```
