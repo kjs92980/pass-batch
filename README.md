@@ -6,6 +6,8 @@ PT 이용권 관리 서비스 내 배치 repository 입니다.
 ## Environments
 * OpenJDK 18.0.1
 * Spring Boot 2.7.2
+
+* Gradle
 * MySQL
 
 ## Process
