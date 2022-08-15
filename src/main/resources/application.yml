@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: pt-pass-batch
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/pass_local?zeroDateTimeBehavior=convertToNull&useUnicode=yes&characterEncoding=UTF-8&connectTimeout=2000&serverTimezone=Asia/Seoul
+    username: pass_local_user
+    password: PassLocal12#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: "SELECT 1"
+      minimum-idle: 10
+      maximum-pool-size: 200
