@@ -1,4 +1,4 @@
-package com.zisu.pass.jobs.pass;
+package com.fastcampus.pass.jobs.pass;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -12,26 +12,26 @@ import org.springframework.context.annotation.Configuration;
 public class PassJobConfig {
     private final StepBuilderFactory stepBuilderFactory;
     private final JobBuilderFactory jobBuilderFactory;
-    private final ReleasePassTasklet releasePassTasklet;
+    private final ExpirePassTasklet expirePassTasklet;
 
-    public PassJobConfig(StepBuilderFactory stepBuilderFactory, JobBuilderFactory jobBuilderFactory, ReleasePassTasklet releasePassTasklet) {
+    public PassJobConfig(StepBuilderFactory stepBuilderFactory, JobBuilderFactory jobBuilderFactory, ExpirePassTasklet expirePassTasklet) {
         this.stepBuilderFactory = stepBuilderFactory;
         this.jobBuilderFactory = jobBuilderFactory;
-        this.releasePassTasklet = releasePassTasklet;
+        this.expirePassTasklet = expirePassTasklet;
     }
 
     @Bean
-    public Step releasePassStep() {
-        return stepBuilderFactory.get("releasePassStep")
-                .tasklet(releasePassTasklet)
+    public Step expirePassStep() {
+        return stepBuilderFactory.get("expirePassStep")
+                .tasklet(expirePassTasklet)
                 .build();
     }
 
     @Bean
-    public Job releasePassJob() {
-        return jobBuilderFactory.get("releasePassJob")
+    public Job expirePassJob() {
+        return jobBuilderFactory.get("expirePassJob")
                 .incrementer(new RunIdIncrementer())
-                .start(releasePassStep())
+                .start(expirePassStep())
                 .build();
     }
 
