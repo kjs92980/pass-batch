@@ -10,7 +10,8 @@ CREATE TABLE `pass`
     `num` int NOT NULL DEFAULT '0' COMMENT '이용권 수',
     `started_at` timestamp NULL DEFAULT NULL COMMENT '시작 일시',
     `ended_at` timestamp NULL DEFAULT NULL COMMENT '종료 일시',
+    `expired_at` timestamp NULL DEFAULT NULL COMMENT '만료 일시',
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
     `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '삭제 여부',
     PRIMARY KEY (`pass_seq`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4 COMMENT='이용권';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='이용권';

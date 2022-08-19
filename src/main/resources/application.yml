@@ -1,12 +1,15 @@
 spring:
   application:
-    name: pt-pass-batch
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/pass_local?zeroDateTimeBehavior=convertToNull&useUnicode=yes&characterEncoding=UTF-8&connectTimeout=2000&serverTimezone=Asia/Seoul
+    name: pass-batch
+  datasource:                           # docker-compose에 정의했던 DB 접속 정보
+    url: jdbc:mysql://127.0.0.1:3306/pass_local?zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: pass_local_user
     password: PassLocal12#
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      connection-test-query: "SELECT 1"
-      minimum-idle: 10
-      maximum-pool-size: 200
+    hikari:                             # hikariCP
+      connection-test-query: "SELECT 1" # pool에서 connection을 제공하기 전에
+      maximum-pool-size: 20             # pool에 보관 가능한 최대 connection 수
+      # minimum-idle: 20
+  batch:
+    jdbc:
+      initialize-schema: always

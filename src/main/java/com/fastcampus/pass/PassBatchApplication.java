@@ -1,4 +1,4 @@
-package com.zisu.pass;
+package com.fastcampus.pass;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
