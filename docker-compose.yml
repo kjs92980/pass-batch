@@ -1,17 +1,18 @@
+# https://hub.docker.com/_/mysql
+
 version: "3.8"
 services:
   mysql:
     container_name: mysql_local
-    image: arm64v8/mysql:8.0.30 # M1 기준
-    volumes:
-      - ./db/conf.d:/etc/mysql/conf.d
-      - ./db/initdb.d:/docker-entrypoint-initdb.d
-    ports:
+    image: mysql:8.0.30
+    volumes:                                      # 볼륨설정, 호스트:컨테이너
+      - ./db/conf.d:/etc/mysql/conf.d             # MySQL 설정
+      - ./db/initdb.d:/docker-entrypoint-initdb.d # 테이블 create, insert
+    ports:                                        # 외부로 노출시킬 port
       - "3306:3306"
-    environment:
+    environment:                                  # 환경 변수
       - MYSQL_DATABASE=pass_local
       - MYSQL_USER=pass_local_user
       - MYSQL_PASSWORD=PassLocal12#
       - MYSQL_ROOT_PASSWORD=PassLocal12#
       - TZ=Asia/Seoul
-    restart: always
