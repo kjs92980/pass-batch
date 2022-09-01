@@ -1,15 +1,16 @@
 spring:
   application:
     name: pass-batch
-  datasource:                           # docker-compose에 정의했던 DB 접속 정보
+  datasource:                           # docker-compose에 정의했던 DB 접속 정보입니다.
     url: jdbc:mysql://127.0.0.1:3306/pass_local?zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: pass_local_user
-    password: PassLocal12#
+    password: passlocal123
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:                             # hikariCP
-      connection-test-query: "SELECT 1" # pool에서 connection을 제공하기 전에
+    hikari:                             # Spring Boot2부터 default DBCP는 hikariCP입니다.
       maximum-pool-size: 20             # pool에 보관 가능한 최대 connection 수
-      # minimum-idle: 20
+      # minimum-idle: 20                  maximum-pool-size를 따라가므로 설정을 생략합니다.
   batch:
     jdbc:
+      # Batch에 사용되는 SQL 초기화 스크립트를 실행합니다. 임베디드인 경우에는 기본적으로 실행하는데, always 설정을 하면 임베디드 타입처럼 항상 활성화시킬 수 있습니다.
+      # 초기 수행한 이후에는 꺼두어도 됩니다.
       initialize-schema: always
