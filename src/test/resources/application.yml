@@ -1,0 +1,20 @@
+# profile=test에서 사용하는 application 파일입니다.
+# 로깅 프레임워크의 어떠한 최적화도 없이 출력하기 때문에 환경에 따라 사용 여부를 결정해야 합니다.
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:              # test 환경은 h2 databse로 구성해도 좋습니다.
+    url: jdbc:mysql://127.0.0.1:3306/pass_local?zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: pass_local_user
+    password: passlocal123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true         # 쿼리를 표준 출력으로
+    properties:
+      hibernate:
+        format_sql: false  # 아름답게 출력
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: off # 바인딩되는 모든 파라미터를 찍습니다.
