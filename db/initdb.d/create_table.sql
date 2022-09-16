@@ -1,6 +1,6 @@
 /*
  id varchar(20)
- status varchar(10)
+ status, event varchar(10) - enum
  그 외 varchar(50)
  */
 
@@ -77,9 +77,21 @@ CREATE TABLE `user_group_mapping`
     `user_group_id`   varchar(20) NOT NULL COMMENT '사용자 그룹 ID',
     `user_id`         varchar(20) NOT NULL COMMENT '사용자 ID',
     `user_group_name` varchar(50) NOT NULL COMMENT '사용자 그룹 이름',
-    `description`     varchar(10) NOT NULL COMMENT '설명',
+    `description`     varchar(50) NOT NULL COMMENT '설명',
     `created_at`      timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
     `modified_at`     timestamp            DEFAULT NULL COMMENT '수정 일시',
     PRIMARY KEY (`user_group_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='사용자 그룹 매핑';
 
+CREATE TABLE `notification`
+(
+    `notification_seq` int           NOT NULL AUTO_INCREMENT COMMENT '알람 순번',
+    `uuid`          varchar(20)   NOT NULL COMMENT '사용자 uuid (카카오톡)',
+    `event`            varchar(10)   NOT NULL COMMENT '이벤트',
+    `text`             varchar(1000) NOT NULL COMMENT '알람 내용',
+    `sent`             tinyint(1)    NOT NULL DEFAULT '0' COMMENT '발송 여부',
+    `sent_at`          timestamp              DEFAULT NULL COMMENT '발송 일시',
+    `created_at`       timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    `modified_at`      timestamp              DEFAULT NULL COMMENT '수정 일시',
+    PRIMARY KEY (`notification_seq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='알람';
