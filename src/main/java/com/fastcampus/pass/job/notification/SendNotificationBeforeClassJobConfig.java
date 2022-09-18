@@ -18,6 +18,7 @@ import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
@@ -92,6 +93,7 @@ public class SendNotificationBeforeClassJobConfig {
                 .<BookingEntity, NotificationEntity>chunk(CHUNK_SIZE)
                 .reader(addNotificationItemReader())
                 .writer(sendNotificationItemWriter)
+                .taskExecutor(new SimpleAsyncTaskExecutor()) // 가장 간단한 멀티쓰레드 TaskExecutor를 선언하였습니다.
                 .build();
     }
 
