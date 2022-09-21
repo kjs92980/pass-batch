@@ -39,4 +39,10 @@ public class BookingEntity extends BaseEntity {
     @JoinColumn(name = "passSeq", insertable = false, updatable = false)
     private PassEntity passEntity;
 
+    // endedAt 기준, yyyy-MM-HH 00:00:00
+    public LocalDateTime getStatisticsAt() {
+        return this.endedAt.withHour(0).withMinute(0).withSecond(0).withNano(0);
+
+    }
+
 }
