@@ -67,7 +67,7 @@ public class UsePassesJobConfig {
                 .name("usePassesItemReader")
                 .entityManagerFactory(entityManagerFactory)
                 // 상태(status)가 완료이며, 종료 일시(endedAt)이 과거인 예약이 이용권 차감 대상이 됩니다.
-                .queryString("select b from BookingEntity b join fetch b.passEntity where b.status = :status and b.usedPass = false and b.endedAt < :endedAt order by b.bookingSeq")
+                .queryString("select b from BookingEntity b join fetch b.passEntity where b.status = :status and b.usedPass = false and b.endedAt < :endedAt")
                 .parameterValues(Map.of("status", BookingStatus.COMPLETED, "endedAt", LocalDateTime.now()))
                 .build();
     }
