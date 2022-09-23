@@ -1,6 +1,7 @@
 package com.fastcampus.pass.util;
 
-import com.vladmihalcea.hibernate.util.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
