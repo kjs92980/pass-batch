@@ -12,12 +12,13 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
+dependencies { // 2.4.0+
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'org.springframework.batch:spring-batch-integration' // AsyncItemProcessor, AsyncItemWriter
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor" // @ConfigurationProperties
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// mysql
 	runtimeOnly 'mysql:mysql-connector-java'
