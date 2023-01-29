@@ -37,6 +37,9 @@ dependencies { // 2.4.0+
 	// csv
 	implementation 'com.opencsv:opencsv:5.7.0'
 
+	testImplementation "org.testcontainers:testcontainers:1.17.6"
+	implementation platform('org.testcontainers:testcontainers-bom:1.17.6')
+	testImplementation('org.testcontainers:mysql')
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.batch:spring-batch-test'
