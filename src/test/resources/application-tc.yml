@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: tc
+  datasource:
+    url: jdbc:tc:mysql:8:///pass-local
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+  batch:
+    jdbc:
+      initialize-schema: always
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: off # 바인딩되는 모든 파라미터를 찍습니다.
