@@ -1,5 +1,7 @@
 package com.fastcampus.pass.job.notification;
 
+import com.fastcampus.pass.adapter.message.KakaoTalkMessageAdapter;
+import com.fastcampus.pass.config.KakaoTalkMessageConfig;
 import com.fastcampus.pass.config.TestBatchConfig;
 import com.fastcampus.pass.repository.booking.BookingEntity;
 import com.fastcampus.pass.repository.booking.BookingRepository;
@@ -31,7 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBatchTest
 @SpringBootTest
 @ActiveProfiles("test")
-@ContextConfiguration(classes = {SendNotificationBeforeClassJobConfig.class, TestBatchConfig.class})
+@ContextConfiguration(classes = {
+        SendNotificationBeforeClassJobConfig.class,
+        TestBatchConfig.class,
+        SendNotificationItemWriter.class,
+        KakaoTalkMessageConfig.class,
+        KakaoTalkMessageAdapter.class
+})
 public class SendNotificationBeforeClassJobConfigTest {
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
