@@ -4,10 +4,7 @@ version: "3.8"                                    # docker-compose 파일 버전
 services:                                         # 서비스들을 선언합니다.
   mysql:                                          # 서비스명을 선언합니다.
     container_name: mysql_local
-    image: mysql:8.0.30
-    volumes:                                      # {호스트}:{컨테이너}
-      - ./db/conf.d:/etc/mysql/conf.d             # MySQL 설정 파일이 있습니다.
-      - ./db/initdb.d:/docker-entrypoint-initdb.d # sh, sql을 파일명 알파벳순으로 수행합니다. 테이블 create, insert 쿼리 파일이 들어있습니다.
+    build: .
     ports:                                        # 외부로 노출시킬 port 입니다.
       - "3306:3306"
     environment:                                  # 환경 변수
