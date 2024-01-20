@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: tc
   datasource:
-    url: jdbc:tc:mysql:8:///pass-local
+    url: jdbc:tc:mysql:8.0.32:///pass-local
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     username: sa
   jpa:
