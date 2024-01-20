@@ -1,17 +1,17 @@
-# pass-batch
+# pass-batch(spring boot3 version)
 
-PT 이용권 관리 서비스 내 배치 repository 입니다.
-이용권 만료, 일괄 지급, 수업 전 알림, 수업 후 이용권 차감 기능을 제공합니다.
+이 작업은 Spring Boot 2 버전에서 Spring Boot 3 버전으로 업그레이드하는 과정을 담고 있습니다.
+업그레이드 과정은 공식 가이드를 기반으로 진행되었습니다.
 
-## Q&A 모음
-* 기본적으로 질문 게시판에 코멘트로 답변드리고 있습니다.
-* 답변의 내용이 이미지를 포함한 자세한 설명이 필요한 경우(e.g. 개발 환경에 대한 가이드) 다음 페이지에 추가 후 링크를 공유드리고 있습니다.
-  * [kjs92980 > Q&A](https://kjs92980.github.io/categories/qa/)
-* 혹시 같은 문제를 경험하고 있는 분들께 도움이 되길 바랍니다. 
+* [Spring Boot 3.0 Migration Guide > Spring Batch Changes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide#spring-batch-changes)
+* [Spring Batch 5.0 Migration Guide](https://github.com/spring-projects/spring-batch/wiki/Spring-Batch-5.0-Migration-Guide)
+* [Hibernate 6.0 Migration Guide](https://docs.jboss.org/hibernate/orm/6.0/migration-guide/migration-guide.html)
+* [vladmihalcea/hypersistence-utils > Migrating to version 3](https://github.com/vladmihalcea/hypersistence-utils)
+* [MySQL Connector/J has new Maven Coordinates](https://blogs.oracle.com/mysql/post/mysql-connectorj-has-new-maven-coordinates)
 
 ## Environments
-* OpenJDK 18.0.1 
-* Spring Boot 2.7.3 
+* OpenJDK 18.0.2 
+* Spring Boot 3.2.2 
 * Gradle 
 * MySQL (Docker)
 * JPA 
