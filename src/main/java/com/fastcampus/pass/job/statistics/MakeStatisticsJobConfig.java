@@ -4,14 +4,16 @@ import com.fastcampus.pass.repository.booking.BookingEntity;
 import com.fastcampus.pass.repository.statistics.StatisticsEntity;
 import com.fastcampus.pass.repository.statistics.StatisticsRepository;
 import com.fastcampus.pass.util.LocalDateTimeUtils;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.Flow;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
@@ -19,8 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,16 +34,12 @@ import java.util.Map;
 public class MakeStatisticsJobConfig {
     private final int CHUNK_SIZE = 10;
 
-    private final JobBuilderFactory jobBuilderFactory;
-    private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
     private final StatisticsRepository statisticsRepository;
     private final MakeDailyStatisticsTasklet makeDailyStatisticsTasklet;
     private final MakeWeeklyStatisticsTasklet makeWeeklyStatisticsTasklet;
 
-    public MakeStatisticsJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, EntityManagerFactory entityManagerFactory, StatisticsRepository statisticsRepository, MakeDailyStatisticsTasklet makeDailyStatisticsTasklet, MakeWeeklyStatisticsTasklet makeWeeklyStatisticsTasklet) {
-        this.jobBuilderFactory = jobBuilderFactory;
-        this.stepBuilderFactory = stepBuilderFactory;
+    public MakeStatisticsJobConfig(EntityManagerFactory entityManagerFactory, StatisticsRepository statisticsRepository, MakeDailyStatisticsTasklet makeDailyStatisticsTasklet, MakeWeeklyStatisticsTasklet makeWeeklyStatisticsTasklet) {
         this.entityManagerFactory = entityManagerFactory;
         this.statisticsRepository = statisticsRepository;
         this.makeDailyStatisticsTasklet = makeDailyStatisticsTasklet;
@@ -49,17 +47,17 @@ public class MakeStatisticsJobConfig {
     }
 
     @Bean
-    public Job makeStatisticsJob() {
+    public Job makeStatisticsJob(JobRepository jobRepository, Step addStatisticsStep, Step makeDailyStatisticsStep, Step makeWeeklyStatisticsStep) {
         Flow addStatisticsFlow = new FlowBuilder<Flow>("addStatisticsFlow")
-                .start(addStatisticsStep())
+                .start(addStatisticsStep)
                 .build();
 
         Flow makeDailyStatisticsFlow = new FlowBuilder<Flow>("makeDailyStatisticsFlow")
-                .start(makeDailyStatisticsStep())
+                .start(makeDailyStatisticsStep)
                 .build();
 
         Flow makeWeeklyStatisticsFlow = new FlowBuilder<Flow>("makeWeeklyStatisticsFlow")
-                .start(makeWeeklyStatisticsStep())
+                .start(makeWeeklyStatisticsStep)
                 .build();
 
         Flow parallelMakeStatisticsFlow = new FlowBuilder<Flow>("parallelMakeStatisticsFlow")
@@ -67,7 +65,7 @@ public class MakeStatisticsJobConfig {
                 .add(makeDailyStatisticsFlow, makeWeeklyStatisticsFlow)
                 .build();
 
-        return this.jobBuilderFactory.get("makeStatisticsJob")
+        return new JobBuilder("makeStatisticsJob", jobRepository)
                 .start(addStatisticsFlow)
                 .next(parallelMakeStatisticsFlow)
                 .build()
@@ -75,9 +73,9 @@ public class MakeStatisticsJobConfig {
     }
 
     @Bean
-    public Step addStatisticsStep() {
-        return this.stepBuilderFactory.get("addStatisticsStep")
-                .<BookingEntity, BookingEntity>chunk(CHUNK_SIZE)
+    public Step addStatisticsStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("addStatisticsStep", jobRepository)
+                .<BookingEntity, BookingEntity>chunk(CHUNK_SIZE, transactionManager)
                 .reader(addStatisticsItemReader(null, null))
                 .writer(addStatisticsItemWriter())
                 .build();
@@ -124,16 +122,16 @@ public class MakeStatisticsJobConfig {
     }
 
     @Bean
-    public Step makeDailyStatisticsStep() {
-        return this.stepBuilderFactory.get("makeDailyStatisticsStep")
-                .tasklet(makeDailyStatisticsTasklet)
+    public Step makeDailyStatisticsStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("makeDailyStatisticsStep", jobRepository)
+                .tasklet(makeDailyStatisticsTasklet, transactionManager)
                 .build();
     }
 
     @Bean
-    public Step makeWeeklyStatisticsStep() {
-        return this.stepBuilderFactory.get("makeWeeklyStatisticsStep")
-                .tasklet(makeWeeklyStatisticsTasklet)
+    public Step makeWeeklyStatisticsStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("makeWeeklyStatisticsStep", jobRepository)
+                .tasklet(makeWeeklyStatisticsTasklet, transactionManager)
                 .build();
     }
 

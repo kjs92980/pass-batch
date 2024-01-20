@@ -13,7 +13,7 @@ import java.util.Properties;
 @ToString
 public class JobLauncherRequest {
     private String name;
-    private Properties jobParameters;
+    private JobParameters jobParameters;
 
     public JobParameters getJobParameters() {
         return new JobParametersBuilder(this.jobParameters).toJobParameters();

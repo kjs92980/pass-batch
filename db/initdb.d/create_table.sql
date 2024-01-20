@@ -66,7 +66,7 @@ CREATE TABLE `user`
     `user_name`   varchar(50) NOT NULL COMMENT '사용자 이름',
     `status`      varchar(10) NOT NULL COMMENT '상태',
     `phone`       varchar(50)          DEFAULT NULL COMMENT '연락처',
-    `meta`        TEXT                 DEFAULT NULL COMMENT '메타 정보, JSON',
+    `meta`        JSON                 DEFAULT NULL COMMENT '메타 정보, JSON',
     `created_at`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
     `modified_at` timestamp            DEFAULT NULL COMMENT '수정 일시',
     PRIMARY KEY (`user_id`)

@@ -4,11 +4,11 @@ import com.fastcampus.pass.adapter.message.KakaoTalkMessageAdapter;
 import com.fastcampus.pass.repository.notification.NotificationEntity;
 import com.fastcampus.pass.repository.notification.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -22,9 +22,10 @@ public class SendNotificationItemWriter implements ItemWriter<NotificationEntity
     }
 
     @Override
-    public void write(List<? extends NotificationEntity> notificationEntities) throws Exception {
+    public void write(Chunk<? extends NotificationEntity> chunk) {
         int count = 0;
 
+        var notificationEntities = chunk.getItems();
         for (NotificationEntity notificationEntity : notificationEntities) {
             boolean successful = kakaoTalkMessageAdapter.sendKakaoTalkMessage(notificationEntity.getUuid(), notificationEntity.getText());
 
@@ -37,7 +38,5 @@ public class SendNotificationItemWriter implements ItemWriter<NotificationEntity
 
         }
         log.info("SendNotificationItemWriter - write: 수업 전 알람 {}/{}건 전송 성공", count, notificationEntities.size());
-
     }
-
 }

@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.3'
+	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 	id 'java'
 }
@@ -12,7 +12,7 @@ repositories {
 	mavenCentral()
 }
 
-dependencies { // 2.4.0+
+dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
 	implementation 'org.springframework.batch:spring-batch-integration' // AsyncItemProcessor, AsyncItemWriter
@@ -21,7 +21,7 @@ dependencies { // 2.4.0+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// mysql
-	runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'com.mysql:mysql-connector-j:8.3.0'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -32,13 +32,13 @@ dependencies { // 2.4.0+
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
 	// hibernate-types
-	implementation 'com.vladmihalcea:hibernate-types-52:2.19.2'
+	implementation 'com.vladmihalcea:hibernate-types-52:2.21.1'
 
 	// csv
-	implementation 'com.opencsv:opencsv:5.7.0'
+	implementation 'com.opencsv:opencsv:5.9'
 
-	testImplementation "org.testcontainers:testcontainers:1.17.6"
-	implementation platform('org.testcontainers:testcontainers-bom:1.17.6')
+	testImplementation "org.testcontainers:testcontainers:1.19.3"
+	implementation platform('org.testcontainers:testcontainers-bom:1.19.3')
 	testImplementation('org.testcontainers:mysql')
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -50,6 +50,8 @@ dependencies { // 2.4.0+
 
 }
 
+/* JUnit 5를 기본적으로 지원
 tasks.named('test') {
 	useJUnitPlatform()
 }
+*/

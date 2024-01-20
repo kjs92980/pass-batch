@@ -1,6 +1,5 @@
 package com.fastcampus.pass.repository.pass;
 
-import com.fastcampus.pass.repository.pass.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

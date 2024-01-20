@@ -2,36 +2,32 @@ package com.fastcampus.pass.job.pass;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class AddPassesJobConfig {
-    // @EnableBatchProcessing로 인해 Bean으로 제공된 JobBuilderFactory, StepBuilderFactory
-    private final JobBuilderFactory jobBuilderFactory;
-    private final StepBuilderFactory stepBuilderFactory;
     private final AddPassesTasklet addPassesTasklet;
 
-    public AddPassesJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, AddPassesTasklet addPassesTasklet) {
-        this.jobBuilderFactory = jobBuilderFactory;
-        this.stepBuilderFactory = stepBuilderFactory;
+    public AddPassesJobConfig(AddPassesTasklet addPassesTasklet) {
         this.addPassesTasklet = addPassesTasklet;
     }
 
     @Bean
-    public Job addPassesJob() {
-        return this.jobBuilderFactory.get("addPassesJob")
-                .start(addPassesStep())
+    public Job addPassesJob(JobRepository jobRepository, Step addPassesStep) {
+        return new JobBuilder("addPassesJob", jobRepository)
+                .start(addPassesStep)
                 .build();
     }
 
-
     @Bean
-    public Step addPassesStep() {
-        return this.stepBuilderFactory.get("addPassesStep")
-                .tasklet(addPassesTasklet)
+    public Step addPassesStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("addPassesStep", jobRepository)
+                .tasklet(addPassesTasklet, transactionManager)
                 .build();
     }
 

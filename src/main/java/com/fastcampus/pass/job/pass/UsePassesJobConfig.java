@@ -5,10 +5,12 @@ import com.fastcampus.pass.repository.booking.BookingRepository;
 import com.fastcampus.pass.repository.booking.BookingStatus;
 import com.fastcampus.pass.repository.pass.PassEntity;
 import com.fastcampus.pass.repository.pass.PassRepository;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.integration.async.AsyncItemProcessor;
 import org.springframework.batch.integration.async.AsyncItemWriter;
 import org.springframework.batch.item.ItemProcessor;
@@ -18,8 +20,8 @@ import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilde
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -28,32 +30,27 @@ import java.util.concurrent.Future;
 public class UsePassesJobConfig {
     private final int CHUNK_SIZE = 10;
 
-    // @EnableBatchProcessing로 인해 Bean으로 제공된 JobBuilderFactory, StepBuilderFactory
-    private final JobBuilderFactory jobBuilderFactory;
-    private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
     private final PassRepository passRepository;
     private final BookingRepository bookingRepository;
 
-    public UsePassesJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, EntityManagerFactory entityManagerFactory, PassRepository passRepository, BookingRepository bookingRepository) {
-        this.jobBuilderFactory = jobBuilderFactory;
-        this.stepBuilderFactory = stepBuilderFactory;
+    public UsePassesJobConfig(EntityManagerFactory entityManagerFactory, PassRepository passRepository, BookingRepository bookingRepository) {
         this.entityManagerFactory = entityManagerFactory;
         this.passRepository = passRepository;
         this.bookingRepository = bookingRepository;
     }
 
     @Bean
-    public Job usePassesJob() {
-        return this.jobBuilderFactory.get("usePassesJob")
-                .start(usePassesStep())
+    public Job usePassesJob(JobRepository jobRepository, Step usePassesStep) {
+        return new JobBuilder("usePassesJob", jobRepository)
+                .start(usePassesStep)
                 .build();
     }
 
     @Bean
-    public Step usePassesStep() {
-        return this.stepBuilderFactory.get("usePassesStep")
-                .<BookingEntity, Future<BookingEntity>>chunk(CHUNK_SIZE)
+    public Step usePassesStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("usePassesStep", jobRepository)
+                .<BookingEntity, Future<BookingEntity>>chunk(CHUNK_SIZE, transactionManager)
                 .reader(usePassesItemReader())
                 .processor(usePassesAsyncItemProcessor())
                 .writer(usePassesAsyncItemWriter())
